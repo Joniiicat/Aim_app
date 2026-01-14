@@ -10,7 +10,7 @@ const Interval = 750; //milliseconds
 let CurrTime = 0;
 
 //target----------------------------------------------------------------------------------------------------------------
-const MaxTargets = 200;
+const MaxTargets = 20;
 let TargetPoints = [];
 
 const TargetElement = document.getElementById("target");
