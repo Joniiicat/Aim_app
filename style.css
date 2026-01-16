@@ -22,6 +22,32 @@ body {
     font-size: 20px;
 }
 
+#pause {
+    display: grid;
+    width: 300px;
+    height: 100vh;
+    place-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#restart {
+    display: flex;
+    width: 100px;
+    height: 40px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+}
+
+#restartText {
+    display: flex;
+    width: 100px;
+    height: 40px;
+    font-size: 30px;
+}
+
 .target {
     background-image: url("images/target.jpg");
     background-size: cover;

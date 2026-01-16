@@ -6,20 +6,22 @@ let Accumulator = 0;
 let LastTime = 0;
 let ElapsedTime = 0;
 
+let GamePaused = false;
+
 //spawning timer--------------------------------------------------------------------------------------------------------
 let Interval ; //milliseconds
 let SpawningCurrTime = 0;
 
 //timer text------------------------------------------------------------------------------------------------------------
-let TimerTime;
 const TextElement = document.getElementById("time");
+
+//button----------------------------------------------------------------------------------------------------------------
+const PauseButtonElement = document.getElementById("restart");
 
 //target speed up-------------------------------------------------------------------------------------------------------
 const MinSpeed = 750;
 const MaxSpeed = 200;
 const MaxTime = 1000 * 120;
-
-let CurrStep
 
 //target----------------------------------------------------------------------------------------------------------------
 const MaxTargets = 20;
@@ -53,22 +55,29 @@ function Update(deltaTime){
     document.addEventListener('click', function(event){
         OnClick();
     });
+
+    PauseButtonElement.addEventListener('click', OnRestartClick);
 }
 
 function FixedUpdate(fixedDeltaTime){
-    //target spawner
-    TargetGenTimer();
-    
-    //game reset trigger
-    if(TargetPoints.length > MaxTargets){ResetGame();}
+    if(!GamePaused){
+        //Elapsed time per round
+        ElapsedTime += fixedDeltaTime;
 
-    //spawn speed up
-    ElapsedTime += fixedDeltaTime;
-    const t = Math.min(ElapsedTime / MaxTime, 1);
-    Interval = Lerp(MinSpeed, MaxSpeed, t);
-    
-    //text update
-    TextElement.textContent = String(Math.round(ElapsedTime / 1000));
+        //target spawner
+        TargetGenTimer();
+
+        //spawn speed up
+        const t = Math.min(ElapsedTime / MaxTime, 1);
+        Interval = Lerp(MinSpeed, MaxSpeed, t);
+
+        //text update
+        TextElement.textContent = String(Math.round(ElapsedTime / 1000));
+    }
+    //game reset trigger
+    if(TargetPoints.length > MaxTargets){
+        OnPause();
+    }
 }
 
 //hit detection---------------------------------------------------------------------------------------------------------
@@ -168,6 +177,10 @@ function RandomPosition(){
     return { x, y };
 }
 
+function ClearTargets(){
+    for(let i = 0; i < TargetPoints.length; i++){TargetPoints[i].remove();}
+}
+
 function GenerateTarget(pos){
     let clone = TargetElement.cloneNode(true);
 
@@ -181,13 +194,29 @@ function GenerateTarget(pos){
     document.body.appendChild(clone);
 }
 
+//menu functions--------------------------------------------------------------------------------------------------------
+function OnPause(){
+    GamePaused = true;
+    PauseButtonElement.style.opacity = "1";
+    ClearTargets();
+}
+
+function OnRestartClick(){
+    ResetGame();
+}
+
 //game loop functions---------------------------------------------------------------------------------------------------
 function ResetGame(){
-    for(let i = 0; i < TargetPoints.length; i++){TargetPoints[i].remove();}
+    PauseButtonElement.style.opacity = "0";
+    TextElement.textContent = "0";
+
+    ClearTargets();
     
     TargetPoints = [];
     SpawningCurrTime = 0;
     ElapsedTime = 0;
+
+    GamePaused = false;
 }
 
 function Lerp(a, b, t) {
