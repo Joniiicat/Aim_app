@@ -10,6 +10,10 @@ let ElapsedTime = 0;
 let Interval ; //milliseconds
 let SpawningCurrTime = 0;
 
+//timer text------------------------------------------------------------------------------------------------------------
+let TimerTime;
+const TextBox = document.getElementById("time");
+
 //target speed up-------------------------------------------------------------------------------------------------------
 const MinSpeed = 750;
 const MaxSpeed = 200;
@@ -52,14 +56,19 @@ function Update(deltaTime){
 }
 
 function FixedUpdate(fixedDeltaTime){
+    //target spawner
     TargetGenTimer();
     
+    //game reset trigger
     if(TargetPoints.length > MaxTargets){ResetGame();}
 
+    //spawn speed up
     ElapsedTime += fixedDeltaTime;
     const t = Math.min(ElapsedTime / MaxTime, 1);
-    console.log(t);
     Interval = Lerp(MinSpeed, MaxSpeed, t);
+    
+    //text update
+    TextBox.textContent = String(Math.round(ElapsedTime / 1000));
 }
 
 //hit detection---------------------------------------------------------------------------------------------------------
