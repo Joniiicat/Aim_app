@@ -17,6 +17,11 @@ body {
     border: 2px solid white;
 }
 
+#hud {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+}
+
 .target {
     background-image: url("images/target.jpg");
     background-size: cover;

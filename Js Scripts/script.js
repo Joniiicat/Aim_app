@@ -12,7 +12,7 @@ let SpawningCurrTime = 0;
 
 //timer text------------------------------------------------------------------------------------------------------------
 let TimerTime;
-const TextBox = document.getElementById("time");
+const TextElement = document.getElementById("time");
 
 //target speed up-------------------------------------------------------------------------------------------------------
 const MinSpeed = 750;
@@ -68,7 +68,7 @@ function FixedUpdate(fixedDeltaTime){
     Interval = Lerp(MinSpeed, MaxSpeed, t);
     
     //text update
-    TextBox.textContent = String(Math.round(ElapsedTime / 1000));
+    TextElement.textContent = String(Math.round(ElapsedTime / 1000));
 }
 
 //hit detection---------------------------------------------------------------------------------------------------------
@@ -167,7 +167,6 @@ function RandomPosition(){
     
     return { x, y };
 }
-
 
 function GenerateTarget(pos){
     let clone = TargetElement.cloneNode(true);
