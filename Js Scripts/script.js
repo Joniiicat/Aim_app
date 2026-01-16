@@ -4,10 +4,18 @@
 const FIXED_TIME_STEP = 20; //20 milliseconds per step
 let Accumulator = 0;
 let LastTime = 0;
+let ElapsedTime = 0;
 
 //spawning timer--------------------------------------------------------------------------------------------------------
-const Interval = 750; //milliseconds
-let CurrTime = 0;
+let Interval ; //milliseconds
+let SpawningCurrTime = 0;
+
+//target speed up-------------------------------------------------------------------------------------------------------
+const MinSpeed = 750;
+const MaxSpeed = 200;
+const MaxTime = 1000 * 120;
+
+let CurrStep
 
 //target----------------------------------------------------------------------------------------------------------------
 const MaxTargets = 20;
@@ -45,8 +53,13 @@ function Update(deltaTime){
 
 function FixedUpdate(fixedDeltaTime){
     TargetGenTimer();
+    
     if(TargetPoints.length > MaxTargets){ResetGame();}
-    console.log(TargetPoints.length);
+
+    ElapsedTime += fixedDeltaTime;
+    const t = Math.min(ElapsedTime / MaxTime, 1);
+    console.log(t);
+    Interval = Lerp(MinSpeed, MaxSpeed, t);
 }
 
 //hit detection---------------------------------------------------------------------------------------------------------
@@ -94,12 +107,12 @@ function OnHit(){
 
 //target functions------------------------------------------------------------------------------------------------------
 function TargetGenTimer(){
-    if(CurrTime >= Interval){
+    if(SpawningCurrTime >= Interval){
         GenerateTarget(RandomPosition());
-        CurrTime = 0;
+        SpawningCurrTime = 0;
     }
     else{
-        CurrTime += FIXED_TIME_STEP;
+        SpawningCurrTime += FIXED_TIME_STEP;
     }
 }
 
@@ -165,9 +178,13 @@ function ResetGame(){
     for(let i = 0; i < TargetPoints.length; i++){TargetPoints[i].remove();}
     
     TargetPoints = [];
-    CurrTime = 0;
+    SpawningCurrTime = 0;
+    ElapsedTime = 0;
 }
 
+function Lerp(a, b, t) {
+    return a + (b - a) * t;
+}
 
 function GameLoop(timestamp) {
     if (LastTime === 0) {
