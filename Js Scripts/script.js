@@ -99,23 +99,6 @@ function OnClick(){
             MY > t.top;
         
         if(hitTarget){
-            OnHit();
-            return;
-        }
-    }
-}
-
-function OnHit(){  
-    for(let i = 0; i < TargetPoints.length; i++){
-        const t = TargetPoints[i].getBoundingClientRect();
-        
-        const targetHit =
-            MX >= t.left &&
-            MX <= t.right &&
-            MY >= t.top &&
-            MY <= t.bottom;
-        
-        if(targetHit){
             TargetPoints[i].remove();
             TargetPoints.splice(i, 1);
             return;
